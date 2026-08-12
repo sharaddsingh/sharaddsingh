@@ -1,7 +1,11 @@
 # Sharad Pratap Singh
 
 <p align="center">
-  <img src="./assets/terminal-animation.gif" width="700">
+  <img
+    src="./assets/github-dashboard.svg"
+    width="700"
+    alt="Sharad Pratap Singh GitHub Dashboard"
+  />
 </p>
 
 AI / Product Analyst | BITS Pilani
