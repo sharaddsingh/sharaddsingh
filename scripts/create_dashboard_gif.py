@@ -77,33 +77,32 @@ LEVEL_COLORS = {
 # ============================================================
 # Fonts
 # ============================================================
+# ============================================================
+# Fonts
+# ============================================================
 
-FONT_PATH = "C:/Windows/Fonts/consola.ttf"
+# Works on both Windows locally and Ubuntu GitHub Actions
+FONT_PATHS = [
+    "C:/Windows/Fonts/consola.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+    "/usr/share/fonts/truetype/liberation2/LiberationMono-Regular.ttf",
+]
 
-FONT_TITLE = ImageFont.truetype(
-    FONT_PATH,
-    22
-)
 
-FONT_NAME = ImageFont.truetype(
-    FONT_PATH,
-    20
-)
+def get_font(size):
+    for path in FONT_PATHS:
+        if Path(path).exists():
+            return ImageFont.truetype(path, size)
 
-FONT_NORMAL = ImageFont.truetype(
-    FONT_PATH,
-    15
-)
+    # Final fallback
+    return ImageFont.load_default()
 
-FONT_SMALL = ImageFont.truetype(
-    FONT_PATH,
-    14
-)
 
-FONT_FOOTER = ImageFont.truetype(
-    FONT_PATH,
-    13
-)
+FONT_TITLE = get_font(22)
+FONT_NAME = get_font(20)
+FONT_NORMAL = get_font(15)
+FONT_SMALL = get_font(14)
+FONT_FOOTER = get_font(13)
 
 
 # ============================================================
