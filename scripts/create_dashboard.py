@@ -1,44 +1,37 @@
 from pathlib import Path
 import json
+from datetime import datetime
 
 
-# --------------------------------
+# ============================================================
 # Configuration
-# --------------------------------
+# ============================================================
 
 WIDTH = 900
 HEIGHT = 650
 
 GITHUB_FILE = Path("data/github.json")
 CONTRIBUTIONS_FILE = Path("data/contributions.json")
-
 OUTPUT_FILE = Path("assets/github-dashboard.svg")
 
 
-# --------------------------------
+# ============================================================
 # Load GitHub data
-# --------------------------------
+# ============================================================
 
 with open(GITHUB_FILE, "r", encoding="utf-8") as file:
     github_data = json.load(file)
 
 
-# --------------------------------
+# ============================================================
 # Load contribution data
-# --------------------------------
+# ============================================================
 
-with open(
-    CONTRIBUTIONS_FILE,
-    "r",
-    encoding="utf-8"
-) as file:
-
+with open(CONTRIBUTIONS_FILE, "r", encoding="utf-8") as file:
     contribution_data = json.load(file)
 
 
-# --------------------------------
-# Extract dynamic values
-# --------------------------------
+days = contribution_data["days"]
 
 name = github_data["name"]
 username = github_data["username"]
@@ -50,9 +43,76 @@ following = github_data["following"]
 total_contributions = contribution_data["total"]
 
 
-# --------------------------------
-# Create dashboard
-# --------------------------------
+# ============================================================
+# Heatmap configuration
+# ============================================================
+
+CELL_SIZE = 10
+GAP = 3
+
+HEATMAP_X = 40
+HEATMAP_Y = 420
+
+LEVEL_COLORS = {
+    "NONE": "#161b22",
+    "FIRST_QUARTILE": "#0e4429",
+    "SECOND_QUARTILE": "#006d32",
+    "THIRD_QUARTILE": "#26a641",
+    "FOURTH_QUARTILE": "#39d353",
+}
+
+
+# ============================================================
+# Generate heatmap cells
+# ============================================================
+
+heatmap_cells = []
+
+for index, day in enumerate(days):
+
+    date = datetime.strptime(
+        day["date"],
+        "%Y-%m-%d"
+    )
+
+    # Sunday = 0
+    weekday = (date.weekday() + 1) % 7
+
+    # Every 7 days = next column
+    week = index // 7
+
+    x = HEATMAP_X + week * (CELL_SIZE + GAP)
+    y = HEATMAP_Y + weekday * (CELL_SIZE + GAP)
+
+    color = LEVEL_COLORS.get(
+        day["level"],
+        LEVEL_COLORS["NONE"]
+    )
+
+    heatmap_cells.append(
+        f"""
+        <rect
+            x="{x}"
+            y="{y}"
+            width="{CELL_SIZE}"
+            height="{CELL_SIZE}"
+            rx="2"
+            fill="{color}"
+        >
+            <title>
+                {day["date"]}: {day["count"]} contributions
+            </title>
+        </rect>
+        """
+    )
+
+
+heatmap_svg = "\n".join(heatmap_cells)
+
+
+# ============================================================
+# Create dashboard SVG
+# ============================================================
 
 svg = f"""<svg
     width="{WIDTH}"
@@ -72,7 +132,7 @@ svg = f"""<svg
     />
 
 
-    <!-- Terminal command -->
+    <!-- Terminal -->
 
     <text
         x="40"
@@ -191,7 +251,7 @@ svg = f"""<svg
     />
 
 
-    <!-- GitHub section -->
+    <!-- GitHub -->
 
     <text
         x="40"
@@ -296,16 +356,9 @@ svg = f"""<svg
     </text>
 
 
-    <!-- Contribution heatmap -->
+    <!-- Heatmap -->
 
-    <image
-        href="contribution-heatmap.svg"
-        x="40"
-        y="410"
-        width="820"
-        height="150"
-        preserveAspectRatio="xMidYMid meet"
-    />
+    {heatmap_svg}
 
 
     <!-- Footer -->
@@ -321,7 +374,7 @@ svg = f"""<svg
     </text>
 
 
-    <!-- Status -->
+    <!-- Online indicator -->
 
     <circle
         cx="690"
@@ -344,9 +397,9 @@ svg = f"""<svg
 """
 
 
-# --------------------------------
-# Save dashboard
-# --------------------------------
+# ============================================================
+# Save
+# ============================================================
 
 OUTPUT_FILE.parent.mkdir(
     parents=True,
@@ -359,15 +412,10 @@ OUTPUT_FILE.write_text(
 )
 
 
-# --------------------------------
-# Output
-# --------------------------------
-
 print("GitHub dashboard created!")
-
 print(f"Repositories: {repositories}")
 print(f"Followers: {followers}")
 print(f"Following: {following}")
 print(f"Contributions: {total_contributions}")
-
+print(f"Heatmap cells: {len(days)}")
 print(f"Output: {OUTPUT_FILE}")
