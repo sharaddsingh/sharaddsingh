@@ -17,15 +17,9 @@ CONTRIBUTIONS_FILE = Path("data/contributions.json")
 
 OUTPUT_FILE = Path("assets/github-dashboard.gif")
 
-# Number of cells revealed per frame
-CELLS_PER_FRAME = 12
-
-# Speed of animation
-FRAME_DURATION = 120
-
-# How long the completed dashboard stays visible
-FINAL_FRAME_DURATION = 3000
-
+CELLS_PER_FRAME = 8
+FRAME_DURATION = 100
+FINAL_FRAME_DURATION = 2500
 
 # ============================================================
 # Load data
