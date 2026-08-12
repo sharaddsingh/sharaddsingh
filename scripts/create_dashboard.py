@@ -8,30 +8,28 @@ from datetime import datetime
 # ============================================================
 
 WIDTH = 900
-HEIGHT = 650
+HEIGHT = 720
 
 GITHUB_FILE = Path("data/github.json")
 CONTRIBUTIONS_FILE = Path("data/contributions.json")
+
 OUTPUT_FILE = Path("assets/github-dashboard.svg")
 
 
 # ============================================================
-# Load GitHub data
+# Load data
 # ============================================================
 
 with open(GITHUB_FILE, "r", encoding="utf-8") as file:
     github_data = json.load(file)
 
-
-# ============================================================
-# Load contribution data
-# ============================================================
-
 with open(CONTRIBUTIONS_FILE, "r", encoding="utf-8") as file:
     contribution_data = json.load(file)
 
 
-days = contribution_data["days"]
+# ============================================================
+# GitHub data
+# ============================================================
 
 name = github_data["name"]
 username = github_data["username"]
@@ -41,6 +39,27 @@ followers = github_data["followers"]
 following = github_data["following"]
 
 total_contributions = contribution_data["total"]
+days = contribution_data["days"]
+
+
+# ============================================================
+# Colors
+# ============================================================
+
+BACKGROUND = "#0d1117"
+BORDER = "#30363d"
+
+WHITE = "#ffffff"
+MUTED = "#8b949e"
+BLUE = "#58a6ff"
+
+LEVEL_COLORS = {
+    "NONE": "#161b22",
+    "FIRST_QUARTILE": "#0e4429",
+    "SECOND_QUARTILE": "#006d32",
+    "THIRD_QUARTILE": "#26a641",
+    "FOURTH_QUARTILE": "#39d353",
+}
 
 
 # ============================================================
@@ -51,15 +70,7 @@ CELL_SIZE = 10
 GAP = 3
 
 HEATMAP_X = 40
-HEATMAP_Y = 420
-
-LEVEL_COLORS = {
-    "NONE": "#161b22",
-    "FIRST_QUARTILE": "#0e4429",
-    "SECOND_QUARTILE": "#006d32",
-    "THIRD_QUARTILE": "#26a641",
-    "FOURTH_QUARTILE": "#39d353",
-}
+HEATMAP_Y = 490
 
 
 # ============================================================
@@ -78,11 +89,16 @@ for index, day in enumerate(days):
     # Sunday = 0
     weekday = (date.weekday() + 1) % 7
 
-    # Every 7 days = next column
+    # One column per week
     week = index // 7
 
-    x = HEATMAP_X + week * (CELL_SIZE + GAP)
-    y = HEATMAP_Y + weekday * (CELL_SIZE + GAP)
+    x = HEATMAP_X + week * (
+        CELL_SIZE + GAP
+    )
+
+    y = HEATMAP_Y + weekday * (
+        CELL_SIZE + GAP
+    )
 
     color = LEVEL_COLORS.get(
         day["level"],
@@ -111,7 +127,7 @@ heatmap_svg = "\n".join(heatmap_cells)
 
 
 # ============================================================
-# Create dashboard SVG
+# SVG
 # ============================================================
 
 svg = f"""<svg
@@ -121,23 +137,29 @@ svg = f"""<svg
     xmlns="http://www.w3.org/2000/svg"
 >
 
+    <!-- ================================================== -->
     <!-- Background -->
+    <!-- ================================================== -->
 
     <rect
-        width="100%"
-        height="100%"
+        x="0"
+        y="0"
+        width="{WIDTH}"
+        height="{HEIGHT}"
         rx="16"
-        fill="#0d1117"
-        stroke="#30363d"
+        fill="{BACKGROUND}"
+        stroke="{BORDER}"
     />
 
 
+    <!-- ================================================== -->
     <!-- Terminal -->
+    <!-- ================================================== -->
 
     <text
         x="40"
         y="55"
-        fill="#58a6ff"
+        fill="{BLUE}"
         font-family="monospace"
         font-size="22"
     >
@@ -145,12 +167,14 @@ svg = f"""<svg
     </text>
 
 
+    <!-- ================================================== -->
     <!-- Name -->
+    <!-- ================================================== -->
 
     <text
         x="40"
-        y="100"
-        fill="#ffffff"
+        y="105"
+        fill="{WHITE}"
         font-family="monospace"
         font-size="20"
     >
@@ -158,12 +182,14 @@ svg = f"""<svg
     </text>
 
 
-    <!-- Separator -->
+    <!-- ================================================== -->
+    <!-- Divider -->
+    <!-- ================================================== -->
 
     <text
         x="40"
-        y="130"
-        fill="#8b949e"
+        y="135"
+        fill="{MUTED}"
         font-family="monospace"
         font-size="15"
     >
@@ -171,12 +197,14 @@ svg = f"""<svg
     </text>
 
 
+    <!-- ================================================== -->
     <!-- Role -->
+    <!-- ================================================== -->
 
     <text
         x="40"
-        y="165"
-        fill="#58a6ff"
+        y="175"
+        fill="{BLUE}"
         font-family="monospace"
         font-size="15"
     >
@@ -185,21 +213,23 @@ svg = f"""<svg
 
     <text
         x="180"
-        y="165"
-        fill="#ffffff"
+        y="175"
+        fill="{WHITE}"
         font-family="monospace"
         font-size="15"
     >
-        AI / Product Analyst
+        AI Engineer
     </text>
 
 
+    <!-- ================================================== -->
     <!-- Education -->
+    <!-- ================================================== -->
 
     <text
         x="40"
-        y="195"
-        fill="#58a6ff"
+        y="205"
+        fill="{BLUE}"
         font-family="monospace"
         font-size="15"
     >
@@ -208,8 +238,8 @@ svg = f"""<svg
 
     <text
         x="180"
-        y="195"
-        fill="#ffffff"
+        y="205"
+        fill="{WHITE}"
         font-family="monospace"
         font-size="15"
     >
@@ -217,48 +247,105 @@ svg = f"""<svg
     </text>
 
 
-    <!-- Stack -->
+    <!-- ================================================== -->
+    <!-- Skills -->
+    <!-- ================================================== -->
 
     <text
         x="40"
-        y="225"
-        fill="#58a6ff"
+        y="235"
+        fill="{BLUE}"
         font-family="monospace"
         font-size="15"
     >
-        Stack
+        Skills
     </text>
 
     <text
         x="180"
-        y="225"
-        fill="#ffffff"
+        y="235"
+        fill="{WHITE}"
         font-family="monospace"
         font-size="15"
     >
-        Python | FastAPI | AI
+        Python | FastAPI | Machine Learning | NLP | GenAI
     </text>
 
 
-    <!-- Separator -->
-
-    <line
-        x1="40"
-        y1="260"
-        x2="860"
-        y2="260"
-        stroke="#30363d"
-    />
-
-
-    <!-- GitHub -->
+    <!-- ================================================== -->
+    <!-- AI Stack -->
+    <!-- ================================================== -->
 
     <text
         x="40"
-        y="300"
-        fill="#58a6ff"
+        y="265"
+        fill="{BLUE}"
         font-family="monospace"
-        font-size="17"
+        font-size="15"
+    >
+        AI Stack
+    </text>
+
+    <text
+        x="180"
+        y="265"
+        fill="{WHITE}"
+        font-family="monospace"
+        font-size="15"
+    >
+        LangChain | RAG | LLMs | AI Agents
+    </text>
+
+
+    <!-- ================================================== -->
+    <!-- Tools -->
+    <!-- ================================================== -->
+
+    <text
+        x="40"
+        y="295"
+        fill="{BLUE}"
+        font-family="monospace"
+        font-size="15"
+    >
+        Tools
+    </text>
+
+    <text
+        x="180"
+        y="295"
+        fill="{WHITE}"
+        font-family="monospace"
+        font-size="15"
+    >
+        Git | Docker | Streamlit | Jupyter | Firebase
+    </text>
+
+
+    <!-- ================================================== -->
+    <!-- Divider -->
+    <!-- ================================================== -->
+
+    <line
+        x1="40"
+        y1="330"
+        x2="860"
+        y2="330"
+        stroke="{BORDER}"
+        stroke-width="1"
+    />
+
+
+    <!-- ================================================== -->
+    <!-- GitHub Section -->
+    <!-- ================================================== -->
+
+    <text
+        x="40"
+        y="365"
+        fill="{BLUE}"
+        font-family="monospace"
+        font-size="18"
     >
         GitHub
     </text>
@@ -268,8 +355,8 @@ svg = f"""<svg
 
     <text
         x="40"
-        y="335"
-        fill="#58a6ff"
+        y="400"
+        fill="{BLUE}"
         font-family="monospace"
         font-size="14"
     >
@@ -278,8 +365,8 @@ svg = f"""<svg
 
     <text
         x="190"
-        y="335"
-        fill="#ffffff"
+        y="400"
+        fill="{WHITE}"
         font-family="monospace"
         font-size="14"
     >
@@ -291,8 +378,8 @@ svg = f"""<svg
 
     <text
         x="40"
-        y="360"
-        fill="#58a6ff"
+        y="425"
+        fill="{BLUE}"
         font-family="monospace"
         font-size="14"
     >
@@ -301,8 +388,8 @@ svg = f"""<svg
 
     <text
         x="190"
-        y="360"
-        fill="#ffffff"
+        y="425"
+        fill="{WHITE}"
         font-family="monospace"
         font-size="14"
     >
@@ -314,8 +401,8 @@ svg = f"""<svg
 
     <text
         x="40"
-        y="385"
-        fill="#58a6ff"
+        y="450"
+        fill="{BLUE}"
         font-family="monospace"
         font-size="14"
     >
@@ -324,8 +411,8 @@ svg = f"""<svg
 
     <text
         x="190"
-        y="385"
-        fill="#ffffff"
+        y="450"
+        fill="{WHITE}"
         font-family="monospace"
         font-size="14"
     >
@@ -333,22 +420,24 @@ svg = f"""<svg
     </text>
 
 
+    <!-- ================================================== -->
     <!-- Contributions -->
+    <!-- ================================================== -->
 
     <text
         x="400"
-        y="300"
-        fill="#58a6ff"
+        y="365"
+        fill="{BLUE}"
         font-family="monospace"
-        font-size="17"
+        font-size="18"
     >
         Contributions
     </text>
 
     <text
         x="400"
-        y="335"
-        fill="#ffffff"
+        y="400"
+        fill="{WHITE}"
         font-family="monospace"
         font-size="14"
     >
@@ -356,17 +445,92 @@ svg = f"""<svg
     </text>
 
 
+    <!-- ================================================== -->
     <!-- Heatmap -->
+    <!-- ================================================== -->
 
     {heatmap_svg}
 
 
-    <!-- Footer -->
+    <!-- ================================================== -->
+    <!-- Heatmap Legend -->
+    <!-- ================================================== -->
 
     <text
         x="40"
-        y="610"
-        fill="#8b949e"
+        y="595"
+        fill="{MUTED}"
+        font-family="monospace"
+        font-size="12"
+    >
+        Less
+    </text>
+
+
+    <rect
+        x="80"
+        y="587"
+        width="10"
+        height="10"
+        rx="2"
+        fill="{LEVEL_COLORS["NONE"]}"
+    />
+
+    <rect
+        x="96"
+        y="587"
+        width="10"
+        height="10"
+        rx="2"
+        fill="{LEVEL_COLORS["FIRST_QUARTILE"]}"
+    />
+
+    <rect
+        x="112"
+        y="587"
+        width="10"
+        height="10"
+        rx="2"
+        fill="{LEVEL_COLORS["SECOND_QUARTILE"]}"
+    />
+
+    <rect
+        x="128"
+        y="587"
+        width="10"
+        height="10"
+        rx="2"
+        fill="{LEVEL_COLORS["THIRD_QUARTILE"]}"
+    />
+
+    <rect
+        x="144"
+        y="587"
+        width="10"
+        height="10"
+        rx="2"
+        fill="{LEVEL_COLORS["FOURTH_QUARTILE"]}"
+    />
+
+    <text
+        x="165"
+        y="595"
+        fill="{MUTED}"
+        font-family="monospace"
+        font-size="12"
+    >
+        More
+    </text>
+
+
+    <!-- ================================================== -->
+    <!-- Footer -->
+    <!-- ================================================== -->
+
+    <text
+        x="40"
+        y="675"
+        fill="{MUTED}"
         font-family="monospace"
         font-size="13"
     >
@@ -377,28 +541,29 @@ svg = f"""<svg
     <!-- Online indicator -->
 
     <circle
-        cx="690"
-        cy="606"
+        cx="685"
+        cy="675"
         r="4"
-        fill="#58a6ff"
+        fill="{BLUE}"
     />
 
     <text
-        x="705"
-        y="610"
-        fill="#58a6ff"
+        x="700"
+        y="679"
+        fill="{BLUE}"
         font-family="monospace"
         font-size="13"
     >
         online
     </text>
 
+
 </svg>
 """
 
 
 # ============================================================
-# Save
+# Save SVG
 # ============================================================
 
 OUTPUT_FILE.parent.mkdir(
@@ -412,7 +577,11 @@ OUTPUT_FILE.write_text(
 )
 
 
-print("GitHub dashboard created!")
+# ============================================================
+# Done
+# ============================================================
+
+print("GitHub dashboard SVG created!")
 print(f"Repositories: {repositories}")
 print(f"Followers: {followers}")
 print(f"Following: {following}")

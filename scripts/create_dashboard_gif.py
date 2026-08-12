@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFont
 # ============================================================
 
 WIDTH = 900
-HEIGHT = 650
+HEIGHT = 720
 
 GITHUB_FILE = Path("data/github.json")
 CONTRIBUTIONS_FILE = Path("data/contributions.json")
@@ -20,6 +20,7 @@ OUTPUT_FILE = Path("assets/github-dashboard.gif")
 CELLS_PER_FRAME = 8
 FRAME_DURATION = 100
 FINAL_FRAME_DURATION = 2500
+
 
 # ============================================================
 # Load data
@@ -71,11 +72,8 @@ LEVEL_COLORS = {
 # ============================================================
 # Fonts
 # ============================================================
-# ============================================================
-# Fonts
-# ============================================================
 
-# Works on both Windows locally and Ubuntu GitHub Actions
+# Works on Windows locally and Ubuntu GitHub Actions
 FONT_PATHS = [
     "C:/Windows/Fonts/consola.ttf",
     "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
@@ -88,7 +86,6 @@ def get_font(size):
         if Path(path).exists():
             return ImageFont.truetype(path, size)
 
-    # Final fallback
     return ImageFont.load_default()
 
 
@@ -107,7 +104,7 @@ CELL_SIZE = 10
 GAP = 3
 
 HEATMAP_X = 40
-HEATMAP_Y = 430
+HEATMAP_Y = 490
 
 
 # ============================================================
@@ -214,6 +211,10 @@ def create_dashboard(revealed_cells):
     )
 
 
+    # ========================================================
+    # AI ENGINEER PROFILE
+    # ========================================================
+
     # --------------------------------------------------------
     # Role
     # --------------------------------------------------------
@@ -227,7 +228,7 @@ def create_dashboard(revealed_cells):
 
     draw.text(
         (180, 140),
-        "AI / Product Analyst",
+        "AI Engineer",
         fill=WHITE,
         font=FONT_NORMAL
     )
@@ -253,19 +254,57 @@ def create_dashboard(revealed_cells):
 
 
     # --------------------------------------------------------
-    # Stack
+    # Skills
     # --------------------------------------------------------
 
     draw.text(
         (40, 200),
-        "Stack",
+        "Skills",
         fill=BLUE,
         font=FONT_NORMAL
     )
 
     draw.text(
         (180, 200),
-        "Python | FastAPI | AI",
+        "Python | FastAPI | Machine Learning | NLP | GenAI",
+        fill=WHITE,
+        font=FONT_NORMAL
+    )
+
+
+    # --------------------------------------------------------
+    # AI Stack
+    # --------------------------------------------------------
+
+    draw.text(
+        (40, 230),
+        "AI Stack",
+        fill=BLUE,
+        font=FONT_NORMAL
+    )
+
+    draw.text(
+        (180, 230),
+        "LangChain | RAG | LLMs | AI Agents",
+        fill=WHITE,
+        font=FONT_NORMAL
+    )
+
+
+    # --------------------------------------------------------
+    # Tools
+    # --------------------------------------------------------
+
+    draw.text(
+        (40, 260),
+        "Tools",
+        fill=BLUE,
+        font=FONT_NORMAL
+    )
+
+    draw.text(
+        (180, 260),
+        "Git | Docker | Streamlit | Jupyter | Firebase",
         fill=WHITE,
         font=FONT_NORMAL
     )
@@ -276,18 +315,22 @@ def create_dashboard(revealed_cells):
     # --------------------------------------------------------
 
     draw.line(
-        (40, 235, 860, 235),
+        (40, 300, 860, 300),
         fill=BORDER,
         width=1
     )
 
 
+    # ========================================================
+    # GITHUB INFORMATION
+    # ========================================================
+
     # --------------------------------------------------------
-    # GitHub
+    # GitHub heading
     # --------------------------------------------------------
 
     draw.text(
-        (40, 270),
+        (40, 335),
         "GitHub",
         fill=BLUE,
         font=FONT_NORMAL
@@ -299,14 +342,14 @@ def create_dashboard(revealed_cells):
     # --------------------------------------------------------
 
     draw.text(
-        (40, 305),
+        (40, 370),
         "Repositories",
         fill=BLUE,
         font=FONT_SMALL
     )
 
     draw.text(
-        (190, 305),
+        (190, 370),
         str(repositories),
         fill=WHITE,
         font=FONT_SMALL
@@ -318,14 +361,14 @@ def create_dashboard(revealed_cells):
     # --------------------------------------------------------
 
     draw.text(
-        (40, 330),
+        (40, 395),
         "Followers",
         fill=BLUE,
         font=FONT_SMALL
     )
 
     draw.text(
-        (190, 330),
+        (190, 395),
         str(followers),
         fill=WHITE,
         font=FONT_SMALL
@@ -337,14 +380,14 @@ def create_dashboard(revealed_cells):
     # --------------------------------------------------------
 
     draw.text(
-        (40, 355),
+        (40, 420),
         "Following",
         fill=BLUE,
         font=FONT_SMALL
     )
 
     draw.text(
-        (190, 355),
+        (190, 420),
         str(following),
         fill=WHITE,
         font=FONT_SMALL
@@ -356,23 +399,23 @@ def create_dashboard(revealed_cells):
     # --------------------------------------------------------
 
     draw.text(
-        (400, 270),
+        (400, 335),
         "Contributions",
         fill=BLUE,
         font=FONT_NORMAL
     )
 
     draw.text(
-        (400, 305),
+        (400, 370),
         f"{total_contributions} contributions",
         fill=WHITE,
         font=FONT_SMALL
     )
 
 
-    # --------------------------------------------------------
-    # Animated heatmap
-    # --------------------------------------------------------
+    # ========================================================
+    # ANIMATED HEATMAP
+    # ========================================================
 
     for cell in cells[:revealed_cells]:
 
@@ -389,11 +432,53 @@ def create_dashboard(revealed_cells):
 
 
     # --------------------------------------------------------
-    # Footer
+    # Heatmap labels
     # --------------------------------------------------------
 
     draw.text(
-        (40, 610),
+        (40, 590),
+        "Less",
+        fill=MUTED,
+        font=FONT_FOOTER
+    )
+
+    legend_x = 82
+
+    for level in [
+        "NONE",
+        "FIRST_QUARTILE",
+        "SECOND_QUARTILE",
+        "THIRD_QUARTILE",
+        "FOURTH_QUARTILE"
+    ]:
+
+        draw.rounded_rectangle(
+            (
+                legend_x,
+                592,
+                legend_x + 10,
+                602
+            ),
+            radius=2,
+            fill=LEVEL_COLORS[level]
+        )
+
+        legend_x += 16
+
+    draw.text(
+        (170, 590),
+        "More",
+        fill=MUTED,
+        font=FONT_FOOTER
+    )
+
+
+    # ========================================================
+    # FOOTER
+    # ========================================================
+
+    draw.text(
+        (40, 675),
         f"github.com/{username}",
         fill=MUTED,
         font=FONT_FOOTER
@@ -401,16 +486,16 @@ def create_dashboard(revealed_cells):
 
 
     # --------------------------------------------------------
-    # Online
+    # Online indicator
     # --------------------------------------------------------
 
     draw.ellipse(
-        (685, 606, 693, 614),
+        (685, 671, 693, 679),
         fill=BLUE
     )
 
     draw.text(
-        (705, 605),
+        (705, 670),
         "online",
         fill=BLUE,
         font=FONT_FOOTER
@@ -480,7 +565,7 @@ OUTPUT_FILE.parent.mkdir(
 )
 
 
-# Make final frame stay longer
+# Keep final frame visible longer
 durations = [
     FRAME_DURATION
 ] * len(frames)
