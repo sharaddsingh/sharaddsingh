@@ -3,21 +3,7 @@
 <text x="30" y="45"
       fill="#58a6ff"
       font-family="monospace"
-      font-size="20"
-      opacity="0">
-
-    $ neofetch
-
-    <animate
-        attributeName="opacity"
-        from="0"
-        to="1"
-        begin="0s"
-        dur="0.5s"
-        fill="freeze"
-    />
-
-</text>
+      font-size="20">$ neofetch</text>
 <text x="30" y="90" fill="#ffffff" font-family="monospace" font-size="18">Sharad Pratap Singh</text>
 <text x="30" y="125" fill="#8b949e" font-family="monospace" font-size="15">-----------------------------</text>
 <text x="30" y="160" fill="#58a6ff" font-family="monospace" font-size="15">Role</text>
