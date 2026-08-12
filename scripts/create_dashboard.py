@@ -8,7 +8,7 @@ from datetime import datetime
 # ============================================================
 
 WIDTH = 900
-HEIGHT = 650
+HEIGHT = 550
 
 INPUT_FILE = Path("data/contributions.json")
 OUTPUT_FILE = Path("assets/github-dashboard.svg")
@@ -293,36 +293,6 @@ svg = f"""
 
     {heatmap_svg}
 
-
-   
-
-
-    <!-- ================================================= -->
-    <!-- Footer -->
-    <!-- ================================================= -->
-
-    <text
-        x="45"
-        y="610"
-        fill="#8b949e"
-        font-family="{FONT}"
-        font-size="13"
-    >
-        github.com/sharaddsingh
-    </text>
-
-
-    <!-- Animated status -->
-
-    <text
-        x="690"
-        y="610"
-        fill="#58a6ff"
-        font-family="{FONT}"
-        font-size="13"
-    >
-        ● online
-    </text>
 
 </svg>
 """
