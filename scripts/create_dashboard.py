@@ -8,7 +8,7 @@ from datetime import datetime
 # ============================================================
 
 WIDTH = 900
-HEIGHT = 550
+HEIGHT = 750
 
 INPUT_FILE = Path("data/contributions.json")
 OUTPUT_FILE = Path("assets/github-dashboard.svg")
