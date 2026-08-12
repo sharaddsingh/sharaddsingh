@@ -4,4 +4,4 @@ AI / Product Analyst | BITS Pilani
 
 I'm interested in Artificial Intelligence, Data Analytics, and building useful products.
 
-<img src="./assets/profile-card.svg" alt="Terminal Profile Card">
+<img src="https://raw.githubusercontent.com/sharaddsingh/sharaddsingh/main/assets/profile-card.svg" alt="Terminal Profile Card">
