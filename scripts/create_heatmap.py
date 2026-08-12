@@ -1,17 +1,22 @@
+from pathlib import Path
 import json
 from datetime import datetime
 
+# --------------------------------
+# Configuration
+# --------------------------------
 
-INPUT_FILE = "data/contributions.json"
-OUTPUT_FILE = "assets/contribution-heatmap.svg"
+WIDTH = 790
+HEIGHT = 180
 
-CELL_SIZE = 12
-GAP = 4
+INPUT_FILE = Path("data/contributions.json")
+OUTPUT_FILE = Path("assets/contribution-heatmap.svg")
 
-LEFT_MARGIN = 35
-TOP_MARGIN = 25
+CELL_SIZE = 10
+GAP = 3
 
-ROWS = 7
+HEATMAP_X = 40
+HEATMAP_Y = 15
 
 LEVEL_COLORS = {
     "NONE": "#161b22",
@@ -21,58 +26,20 @@ LEVEL_COLORS = {
     "FOURTH_QUARTILE": "#39d353",
 }
 
-
-# -----------------------------
+# --------------------------------
 # Load contribution data
-# -----------------------------
+# --------------------------------
 
 with open(INPUT_FILE, "r", encoding="utf-8") as file:
-    data = json.load(file)
+    contribution_data = json.load(file)
 
-days = data["days"]
+days = contribution_data["days"]
 
+# --------------------------------
+# Generate heatmap cells
+# --------------------------------
 
-# -----------------------------
-# Calculate dimensions
-# -----------------------------
-
-total_days = len(days)
-
-weeks = (total_days + 6) // 7
-
-width = (
-    LEFT_MARGIN
-    + weeks * (CELL_SIZE + GAP)
-    + 20
-)
-
-height = (
-    TOP_MARGIN
-    + ROWS * (CELL_SIZE + GAP)
-    + 25
-)
-
-
-# -----------------------------
-# Start SVG
-# -----------------------------
-
-svg = []
-
-svg.append(
-    f'<svg width="{width}" height="{height}" '
-    f'viewBox="0 0 {width} {height}" '
-    f'xmlns="http://www.w3.org/2000/svg">'
-)
-
-svg.append(
-    '<rect width="100%" height="100%" fill="#0d1117" rx="8"/>'
-)
-
-
-# -----------------------------
-# Draw cells
-# -----------------------------
+heatmap_cells = []
 
 for index, day in enumerate(days):
 
@@ -81,36 +48,25 @@ for index, day in enumerate(days):
         "%Y-%m-%d"
     )
 
+    # Sunday = 0
     weekday = (date.weekday() + 1) % 7
 
+    # Every 7 days = one column
     week = index // 7
 
-    x = (
-        LEFT_MARGIN
-        + week * (CELL_SIZE + GAP)
-    )
-
-    y = (
-        TOP_MARGIN
-        + weekday * (CELL_SIZE + GAP)
-    )
-
-    level = day["level"]
+    x = HEATMAP_X + week * (CELL_SIZE + GAP)
+    y = HEATMAP_Y + weekday * (CELL_SIZE + GAP)
 
     color = LEVEL_COLORS.get(
-        level,
+        day["level"],
         LEVEL_COLORS["NONE"]
     )
 
-    count = day["count"]
-
-    # Each cell starts invisible
-    # and fades in at a different time.
-
+    # Animation delay
     delay = index * 0.015
 
-    svg.append(
-        f'''
+    heatmap_cells.append(
+        f"""
         <rect
             x="{x}"
             y="{y}"
@@ -121,7 +77,7 @@ for index, day in enumerate(days):
             opacity="0"
         >
             <title>
-                {day["date"]}: {count} contributions
+                {day["date"]}: {day["count"]} contributions
             </title>
 
             <animate
@@ -133,107 +89,48 @@ for index, day in enumerate(days):
                 fill="freeze"
             />
         </rect>
-        '''
+        """
     )
 
+heatmap_svg = "\n".join(heatmap_cells)
 
-# -----------------------------
-# Legend
-# -----------------------------
+# --------------------------------
+# Create SVG
+# --------------------------------
 
-legend_y = height - 17
-legend_x = LEFT_MARGIN
+svg = f"""<svg
+    width="{WIDTH}"
+    height="{HEIGHT}"
+    viewBox="0 0 {WIDTH} {HEIGHT}"
+    xmlns="http://www.w3.org/2000/svg"
+>
 
-svg.append(
-    f'''
-    <text
-        x="{legend_x - 30}"
-        y="{legend_y + 4}"
-        fill="#8b949e"
-        font-family="monospace"
-        font-size="10"
-    >
-        Less
-    </text>
-    '''
-)
+    <!-- Background -->
 
+    <rect
+        width="100%"
+        height="100%"
+        rx="10"
+        fill="#0d1117"
+    />
 
-legend_levels = [
-    "NONE",
-    "FIRST_QUARTILE",
-    "SECOND_QUARTILE",
-    "THIRD_QUARTILE",
-    "FOURTH_QUARTILE",
-]
+    <!-- Contribution heatmap -->
 
+    {heatmap_svg}
 
-for i, level in enumerate(legend_levels):
+</svg>
+"""
 
-    x = (
-        legend_x
-        + i * (CELL_SIZE + GAP + 3)
-    )
+# --------------------------------
+# Save SVG
+# --------------------------------
 
-    svg.append(
-        f'''
-        <rect
-            x="{x}"
-            y="{legend_y - 8}"
-            width="{CELL_SIZE}"
-            height="{CELL_SIZE}"
-            rx="2"
-            fill="{LEVEL_COLORS[level]}"
-        />
-        '''
-    )
-
-
-svg.append(
-    f'''
-    <text
-        x="{legend_x + 5 * (CELL_SIZE + GAP + 3) + 5}"
-        y="{legend_y + 4}"
-        fill="#8b949e"
-        font-family="monospace"
-        font-size="10"
-    >
-        More
-    </text>
-    '''
-)
-
-
-# -----------------------------
-# Close SVG
-# -----------------------------
-
-svg.append("</svg>")
-
-
-# -----------------------------
-# Save
-# -----------------------------
-
-with open(
-    OUTPUT_FILE,
-    "w",
+OUTPUT_FILE.write_text(
+    svg,
     encoding="utf-8"
-) as file:
-
-    file.write("\n".join(svg))
-
-
-print("Animated contribution heatmap created!")
-
-print(
-    f"Total contributions: {data['total']}"
 )
 
-print(
-    f"Days processed: {len(days)}"
-)
-
-print(
-    f"Output: {OUTPUT_FILE}"
-)
+print("Contribution heatmap created!")
+print(f"Weeks: {(len(days) + 6) // 7}")
+print(f"Days: {len(days)}")
+print(f"Output: {OUTPUT_FILE}")

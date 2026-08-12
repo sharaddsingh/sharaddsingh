@@ -3,36 +3,40 @@ import json
 from datetime import datetime
 
 
-# -----------------------------
+# ============================================================
 # Configuration
-# -----------------------------
+# ============================================================
 
 WIDTH = 900
 HEIGHT = 650
 
-OUTPUT_FILE = Path("assets/github-dashboard.svg")
 INPUT_FILE = Path("data/contributions.json")
+OUTPUT_FILE = Path("assets/github-dashboard.svg")
+
+FONT = "monospace"
 
 
-# -----------------------------
+# ============================================================
 # Load contribution data
-# -----------------------------
+# ============================================================
 
 with open(INPUT_FILE, "r", encoding="utf-8") as file:
     contribution_data = json.load(file)
 
 days = contribution_data["days"]
 
+total_contributions = contribution_data["total"]
 
-# -----------------------------
+
+# ============================================================
 # Heatmap configuration
-# -----------------------------
+# ============================================================
 
-CELL_SIZE = 10
+CELL_SIZE = 12
 GAP = 3
 
-HEATMAP_X = 60
-HEATMAP_Y = 350
+HEATMAP_X = 45
+HEATMAP_Y = 370
 
 LEVEL_COLORS = {
     "NONE": "#161b22",
@@ -43,9 +47,9 @@ LEVEL_COLORS = {
 }
 
 
-# -----------------------------
-# Generate contribution cells
-# -----------------------------
+# ============================================================
+# Generate heatmap
+# ============================================================
 
 heatmap_cells = []
 
@@ -56,10 +60,8 @@ for index, day in enumerate(days):
         "%Y-%m-%d"
     )
 
-    # Sunday = 0
     weekday = (date.weekday() + 1) % 7
 
-    # Each 7 days = one column
     week = index // 7
 
     x = HEATMAP_X + week * (CELL_SIZE + GAP)
@@ -70,7 +72,6 @@ for index, day in enumerate(days):
         LEVEL_COLORS["NONE"]
     )
 
-    # Animation delay
     delay = index * 0.015
 
     heatmap_cells.append(
@@ -84,6 +85,7 @@ for index, day in enumerate(days):
             fill="{color}"
             opacity="0"
         >
+
             <title>
                 {day["date"]}: {day["count"]} contributions
             </title>
@@ -93,9 +95,10 @@ for index, day in enumerate(days):
                 from="0"
                 to="1"
                 begin="{delay:.3f}s"
-                dur="0.25s"
+                dur="0.2s"
                 fill="freeze"
             />
+
         </rect>
         """
     )
@@ -104,9 +107,9 @@ for index, day in enumerate(days):
 heatmap_svg = "\n".join(heatmap_cells)
 
 
-# -----------------------------
-# Create SVG
-# -----------------------------
+# ============================================================
+# Dashboard SVG
+# ============================================================
 
 svg = f"""
 <svg
@@ -116,7 +119,9 @@ svg = f"""
     xmlns="http://www.w3.org/2000/svg"
 >
 
+    <!-- ================================================= -->
     <!-- Background -->
+    <!-- ================================================= -->
 
     <rect
         width="100%"
@@ -127,49 +132,56 @@ svg = f"""
     />
 
 
-    <!-- Terminal header -->
+    <!-- ================================================= -->
+    <!-- Terminal command -->
+    <!-- ================================================= -->
 
     <text
-        x="40"
+        x="45"
         y="55"
         fill="#58a6ff"
-        font-family="monospace"
+        font-family="{FONT}"
         font-size="22"
     >
         $ neofetch
     </text>
 
 
-    <!-- Profile -->
+    <!-- ================================================= -->
+    <!-- Name -->
+    <!-- ================================================= -->
 
     <text
-        x="40"
+        x="45"
         y="105"
         fill="#ffffff"
-        font-family="monospace"
+        font-family="{FONT}"
         font-size="20"
     >
         Sharad Pratap Singh
     </text>
 
+
     <text
-        x="40"
+        x="45"
         y="135"
         fill="#8b949e"
-        font-family="monospace"
+        font-family="{FONT}"
         font-size="15"
     >
         -----------------------------
     </text>
 
 
-    <!-- Information -->
+    <!-- ================================================= -->
+    <!-- Role -->
+    <!-- ================================================= -->
 
     <text
-        x="40"
+        x="45"
         y="175"
         fill="#58a6ff"
-        font-family="monospace"
+        font-family="{FONT}"
         font-size="15"
     >
         Role
@@ -179,18 +191,22 @@ svg = f"""
         x="180"
         y="175"
         fill="#ffffff"
-        font-family="monospace"
+        font-family="{FONT}"
         font-size="15"
     >
         AI / Product Analyst
     </text>
 
 
+    <!-- ================================================= -->
+    <!-- Education -->
+    <!-- ================================================= -->
+
     <text
-        x="40"
+        x="45"
         y="205"
         fill="#58a6ff"
-        font-family="monospace"
+        font-family="{FONT}"
         font-size="15"
     >
         Education
@@ -200,18 +216,22 @@ svg = f"""
         x="180"
         y="205"
         fill="#ffffff"
-        font-family="monospace"
+        font-family="{FONT}"
         font-size="15"
     >
         BITS Pilani
     </text>
 
 
+    <!-- ================================================= -->
+    <!-- Stack -->
+    <!-- ================================================= -->
+
     <text
-        x="40"
+        x="45"
         y="235"
         fill="#58a6ff"
-        font-family="monospace"
+        font-family="{FONT}"
         font-size="15"
     >
         Stack
@@ -221,126 +241,103 @@ svg = f"""
         x="180"
         y="235"
         fill="#ffffff"
-        font-family="monospace"
+        font-family="{FONT}"
         font-size="15"
     >
         Python | FastAPI | AI
     </text>
 
 
-    <!-- Contribution section -->
+    <!-- ================================================= -->
+    <!-- Divider -->
+    <!-- ================================================= -->
+
+    <line
+        x1="45"
+        y1="280"
+        x2="855"
+        y2="280"
+        stroke="#30363d"
+    />
+
+
+    <!-- ================================================= -->
+    <!-- Contributions header -->
+    <!-- ================================================= -->
 
     <text
-        x="40"
-        y="310"
+        x="45"
+        y="320"
         fill="#58a6ff"
-        font-family="monospace"
+        font-family="{FONT}"
         font-size="18"
     >
         Contributions
     </text>
 
 
+    <text
+        x="230"
+        y="320"
+        fill="#8b949e"
+        font-family="{FONT}"
+        font-size="14"
+    >
+        {total_contributions} contributions
+    </text>
+
+
+    <!-- ================================================= -->
     <!-- Heatmap -->
+    <!-- ================================================= -->
 
     {heatmap_svg}
 
 
-    <!-- Legend -->
-
-    <text
-        x="60"
-        y="455"
-        fill="#8b949e"
-        font-family="monospace"
-        font-size="11"
-    >
-        Less
-    </text>
-
-    <rect
-        x="100"
-        y="445"
-        width="10"
-        height="10"
-        rx="2"
-        fill="#161b22"
-    />
-
-    <rect
-        x="116"
-        y="445"
-        width="10"
-        height="10"
-        rx="2"
-        fill="#0e4429"
-    />
-
-    <rect
-        x="132"
-        y="445"
-        width="10"
-        height="10"
-        rx="2"
-        fill="#006d32"
-    />
-
-    <rect
-        x="148"
-        y="445"
-        width="10"
-        height="10"
-        rx="2"
-        fill="#26a641"
-    />
-
-    <rect
-        x="164"
-        y="445"
-        width="10"
-        height="10"
-        rx="2"
-        fill="#39d353"
-    />
-
-    <text
-        x="182"
-        y="455"
-        fill="#8b949e"
-        font-family="monospace"
-        font-size="11"
-    >
-        More
-    </text>
+   
 
 
+    <!-- ================================================= -->
     <!-- Footer -->
+    <!-- ================================================= -->
 
     <text
-        x="40"
+        x="45"
         y="610"
         fill="#8b949e"
-        font-family="monospace"
+        font-family="{FONT}"
         font-size="13"
     >
         github.com/sharaddsingh
+    </text>
+
+
+    <!-- Animated status -->
+
+    <text
+        x="690"
+        y="610"
+        fill="#58a6ff"
+        font-family="{FONT}"
+        font-size="13"
+    >
+        ● online
     </text>
 
 </svg>
 """
 
 
-# -----------------------------
-# Save SVG
-# -----------------------------
+# ============================================================
+# Save dashboard
+# ============================================================
 
 OUTPUT_FILE.write_text(
     svg,
     encoding="utf-8"
 )
 
-
-print("Dashboard SVG created!")
-print(f"Total contributions: {contribution_data['total']}")
+print("GitHub dashboard created!")
+print(f"Total contributions: {total_contributions}")
 print(f"Days processed: {len(days)}")
 print(f"Output: {OUTPUT_FILE}")
