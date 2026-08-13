@@ -1841,6 +1841,11 @@
       "date": "2026-08-12",
       "count": 28,
       "level": "FOURTH_QUARTILE"
+    },
+    {
+      "date": "2026-08-13",
+      "count": 0,
+      "level": "NONE"
     }
   ]
 }
