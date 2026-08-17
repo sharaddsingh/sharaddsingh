@@ -767,7 +767,7 @@
             width="10"
             height="10"
             rx="2"
-            fill="#26a641"
+            fill="#39d353"
             opacity="0"
         >
             <title>
@@ -8111,7 +8111,7 @@
             width="10"
             height="10"
             rx="2"
-            fill="#26a641"
+            fill="#39d353"
             opacity="0"
         >
             <title>
@@ -8135,7 +8135,7 @@
             width="10"
             height="10"
             rx="2"
-            fill="#006d32"
+            fill="#26a641"
             opacity="0"
         >
             <title>
@@ -8543,7 +8543,7 @@
             width="10"
             height="10"
             rx="2"
-            fill="#26a641"
+            fill="#39d353"
             opacity="0"
         >
             <title>
@@ -8735,11 +8735,11 @@
             width="10"
             height="10"
             rx="2"
-            fill="#006d32"
+            fill="#161b22"
             opacity="0"
         >
             <title>
-                2026-08-15: 2 contributions
+                2026-08-15: 0 contributions
             </title>
 
             <animate
@@ -8771,6 +8771,30 @@
                 from="0"
                 to="1"
                 begin="5.460s"
+                dur="0.25s"
+                fill="freeze"
+            />
+        </rect>
+        
+
+        <rect
+            x="716"
+            y="28"
+            width="10"
+            height="10"
+            rx="2"
+            fill="#161b22"
+            opacity="0"
+        >
+            <title>
+                2026-08-17: 0 contributions
+            </title>
+
+            <animate
+                attributeName="opacity"
+                from="0"
+                to="1"
+                begin="5.475s"
                 dur="0.25s"
                 fill="freeze"
             />

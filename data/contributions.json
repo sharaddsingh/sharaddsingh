@@ -1,6 +1,6 @@
 {
   "username": "sharaddsingh",
-  "total": 103,
+  "total": 89,
   "days": [
     {
       "date": "2025-08-17",
@@ -160,7 +160,7 @@
     {
       "date": "2025-09-17",
       "count": 4,
-      "level": "THIRD_QUARTILE"
+      "level": "FOURTH_QUARTILE"
     },
     {
       "date": "2025-09-18",
@@ -1690,12 +1690,12 @@
     {
       "date": "2026-07-20",
       "count": 4,
-      "level": "THIRD_QUARTILE"
+      "level": "FOURTH_QUARTILE"
     },
     {
       "date": "2026-07-21",
       "count": 3,
-      "level": "SECOND_QUARTILE"
+      "level": "THIRD_QUARTILE"
     },
     {
       "date": "2026-07-22",
@@ -1780,7 +1780,7 @@
     {
       "date": "2026-08-07",
       "count": 4,
-      "level": "THIRD_QUARTILE"
+      "level": "FOURTH_QUARTILE"
     },
     {
       "date": "2026-08-08",
@@ -1819,11 +1819,16 @@
     },
     {
       "date": "2026-08-15",
-      "count": 2,
-      "level": "SECOND_QUARTILE"
+      "count": 0,
+      "level": "NONE"
     },
     {
       "date": "2026-08-16",
+      "count": 0,
+      "level": "NONE"
+    },
+    {
+      "date": "2026-08-17",
       "count": 0,
       "level": "NONE"
     }
