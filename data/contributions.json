@@ -3,41 +3,6 @@
   "total": 94,
   "days": [
     {
-      "date": "2025-08-24",
-      "count": 0,
-      "level": "NONE"
-    },
-    {
-      "date": "2025-08-25",
-      "count": 0,
-      "level": "NONE"
-    },
-    {
-      "date": "2025-08-26",
-      "count": 0,
-      "level": "NONE"
-    },
-    {
-      "date": "2025-08-27",
-      "count": 0,
-      "level": "NONE"
-    },
-    {
-      "date": "2025-08-28",
-      "count": 2,
-      "level": "SECOND_QUARTILE"
-    },
-    {
-      "date": "2025-08-29",
-      "count": 0,
-      "level": "NONE"
-    },
-    {
-      "date": "2025-08-30",
-      "count": 0,
-      "level": "NONE"
-    },
-    {
       "date": "2025-08-31",
       "count": 0,
       "level": "NONE"
@@ -1854,6 +1819,11 @@
     },
     {
       "date": "2026-08-29",
+      "count": 0,
+      "level": "NONE"
+    },
+    {
+      "date": "2026-08-30",
       "count": 0,
       "level": "NONE"
     }
