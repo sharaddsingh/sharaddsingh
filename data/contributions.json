@@ -1,6 +1,6 @@
 {
   "username": "sharaddsingh",
-  "total": 102,
+  "total": 100,
   "days": [
     {
       "date": "2025-10-05",
@@ -1824,6 +1824,11 @@
     },
     {
       "date": "2026-10-04",
+      "count": 0,
+      "level": "NONE"
+    },
+    {
+      "date": "2026-10-05",
       "count": 0,
       "level": "NONE"
     }
