@@ -1,25 +1,3 @@
-# Sharad Pratap Singh
-
-<p align="center">
-  <img
-    src="./assets/github-dashboard.gif"
-    width="700"
-    alt="Sharad Pratap Singh GitHub Dashboard"
-  />
-</p>
-
-<p align="center">
-  <strong>AI Engineer · BITS Pilani</strong>
-</p>
-
-<p align="center">
-  Building AI applications, machine learning systems, and GenAI solutions.
-</p>
-
----
-
-## About
-
 I'm an aspiring AI Engineer focused on building practical AI and machine learning applications.
 
 My current interests include:
